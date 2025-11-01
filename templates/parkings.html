@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parking Management | Galaxy Parking Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    /* Background */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: url('https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&w=1600&q=80')
+                  no-repeat center center fixed;
+      background-size: cover;
+      font-family: "Segoe UI", sans-serif;
+      color: white;
+      position: relative;
+    }
+
+    /* Overlay */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(5px);
+      z-index: 0;
+    }
+
+    /* Navbar */
+    nav.navbar {
+      position: relative;
+      z-index: 3;
+      background: linear-gradient(135deg, rgba(0, 80, 0, 0.9), rgba(0, 0, 0, 0.9));
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+    }
+
+    .navbar-brand, h2.nav-title {
+      font-weight: 700;
+      color: #b6f2b6 !important;
+      text-shadow: 0 0 8px rgba(144, 238, 144, 0.8);
+      margin: 0;
+    }
+
+    .navbar .btn-outline-light {
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      color: #e2e2e2;
+    }
+
+    .navbar .btn-outline-light:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #b6f2b6;
+      box-shadow: 0 0 10px rgba(144, 238, 144, 0.4);
+    }
+
+    /* Search Bar */
+    .search-bar {
+      margin: 2rem auto;
+      max-width: 600px;
+      z-index: 2;
+      position: relative;
+    }
+
+    .search-bar input {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 25px;
+      padding: 10px 15px;
+      backdrop-filter: blur(4px);
+    }
+
+    .search-bar input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .btn-primary, .btn-outline-primary {
+      border-radius: 25px;
+      font-weight: 600;
+    }
+
+    /* Cards */
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #fff;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .card-title {
+      color: #a8f0a8;
+      font-weight: 700;
+    }
+
+    /* Slot buttons */
+    .slot {
+      width: 70px;
+      height: 60px;
+      border-radius: 12px;
+      margin: 4px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: #fff;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .slot:hover {
+      transform: scale(1.08);
+    }
+
+    .bg-success {
+      background-color: #28a745 !important;
+      box-shadow: 0 0 8px rgba(40, 167, 69, 0.6);
+    }
+
+    .bg-danger {
+      background-color: #dc3545 !important;
+      box-shadow: 0 0 8px rgba(220, 53, 69, 0.6);
+    }
+
+    /* Floating Add Button */
+    .floating-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 10;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .floating-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(40, 167, 69, 0.7);
+      background-color: #23923f;
+    }
+
+    @media (max-width: 768px) {
+      .floating-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="overlay"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-dark px-4">
+    <h2 class="nav-title">🅿️ Galaxy Parking Admin</h2>
+    <div class="d-flex">
+      <a href="/admin" class="btn btn-outline-light btn-sm me-2">Dashboard</a>
+      <a href="/logout" class="btn btn-outline-light btn-sm">Logout</a>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search by location name" aria-label="Search" name="query" />
+        <button class="btn btn-success" type="submit">Search</button>
+        <a href="/parkings" class="btn btn-outline-light ms-2">Reset</a>
+      </form>
+    </div>
+
+    <!-- No Parking Case -->
+    {% if not parking %}
+      <div class="col">
+        <div class="card h-100 text-center py-3">
+          <h5 class="card-title">That's Sad! No Parking Lots Available</h5>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Parking Lot Cards -->
+    {% for park in parking %}
+    <div class="row justify-content-center mb-3">
+      <div class="col-md-8">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">{{ park.location_name }}</h5>
+            <p class="card-text">{{ park.address }}, {{ park.pincode }}</p>
+            <p class="card-text">{{ available_spots_count[park.id] }}/{{ total_spots_count[park.id] }} slots available</p>
+
+            <!-- Spot Indicators -->
+            <div class="d-flex flex-wrap mt-3">
+              {% for spot in park.spots %}
+                <a href="/available_occupied/{{ spot.id }}" class="text-decoration-none">
+                  <div class="{% if spot.status == 'A' %}bg-success{% else %}bg-danger{% endif %} slot">
+                    Slot->{{ spot.slot_number }}-{{spot.status}}
+                  </div>
+                </a>
+              {% endfor %}
+            </div>
+
+            <!-- Edit and Delete Buttons -->
+            <div class="mt-4 d-flex justify-content-end gap-2 flex-wrap">
+              <a href="/modify_parking/{{ park.id }}" class="btn btn-sm btn-info">Modify</a>
+              {% if available_spots_count[park.id] == total_spots_count[park.id] %}
+                <a href="/remove_parking/{{ park.id }}" class="btn btn-sm btn-danger"
+                onclick="return confirm('Are you sure you want to delete this parking lot?');">Delete</a>
+              {% else %}
+                <button class="text-muted btn btn-sm btn-warning"
+                onclick="return alert('This Parking Lot cannot be deleted. It has Active Bookings');">
+                  Parking Lot cannot be deleted. It has Active Bookings
+                </button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Floating Add Button -->
+  <a href="/add_spots" class="floating-btn">+</a>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
