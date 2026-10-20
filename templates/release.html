@@ -87,6 +87,10 @@
 </head>
 
 <body>
+  {% with messages = get_flashed_messages() %}{% if messages %}
+  <div class="container mt-3"><div class="alert alert-warning" role="alert">{% for m in messages %}<div>{{ m }}</div>{% endfor %}</div></div>
+  {% endif %}{% endwith %}
+
   <div class="overlay"></div>
 
   <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
@@ -123,6 +127,7 @@
       </table>
 
       <form action="/end_booking/{{ booking.id }}" method="POST" class="text-center mt-3">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button type="submit" class="btn btn-danger px-4">Release Booking</button>
       </form>
     </div>

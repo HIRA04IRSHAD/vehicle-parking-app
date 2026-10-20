@@ -1,32 +1,61 @@
 # Vehicle Parking App
 
-This is a simple app to help manage a parking lot. It is made with Python and Flask.
+A parking lot management web app built with Python and Flask, made as the Modern Application Development I (MAD-1) project of the IIT Madras BS degree.
 
-## Description
-This app helps you organize and control your parking lot in an easy way. You can add new parking spots, book a spot for your car, and release it when you leave. The app shows you which spots are free and which are taken, so you always know where you can park. It also lets you manage users, so only the right people can use the parking lot. The app is made to be simple, so anyone can use it without any trouble. Whether you have a small parking area or a big one, this app can help you keep everything in order and save time.
+An admin creates parking lots and manages spots and users. Users find a lot, book a spot for their vehicle and release it when they leave, and are billed by the hour.
 
-## What you can do
-- Add parking spots
-- Book a parking spot
-- Release a parking spot
-- See which spots are free or taken
-- Manage users
+## Features
 
-## Who can use this app?
-Anyone who wants to keep track of parking spots, like parking lot owners, workers, or people who want to organize their parking area.
+**Admin**
+- Create, edit and delete parking lots. Spots are generated automatically from the number of slots.
+- See each spot's status (available or occupied) and who is parked there.
+- Manage users. A user with an active booking cannot be deleted.
+- Summary page with charts of slot availability and revenue per lot (Matplotlib).
 
-## What you need
-- Python installed on your computer
-- Flask (a tool for making web apps)
+**User**
+- Sign up, log in and edit your profile.
+- Search lots by name, address or pincode.
+- Book the first free spot in a lot (up to 3 active bookings, one per vehicle).
+- Release a booking. Cost is the hourly price times the time parked, with a minimum charge of ₹20.
+- See your booking history.
 
-## How to use
-1. Open the app.
-2. Log in or sign up.
-3. Use the menu to do what you need.
+## Tech stack
 
-## About
-This app helps you keep track of cars and parking spots easily.
+Python · Flask · Flask-SQLAlchemy (SQLite locally, PostgreSQL via `DATABASE_URL`) · Flask-WTF (CSRF protection) · Jinja2 · Bootstrap · Matplotlib
 
----
+## Data model
 
-Thank you for using this app! If you have any questions, feel free to ask.
+- **User**: username, hashed password, name, address, pincode
+- **Parking**: lot name, address, pincode, price per hour, number of slots
+- **ParkingSpot**: belongs to a lot; status `A` (available) or `O` (occupied)
+- **Booking**: user, spot, vehicle number, start/end time, cost
+
+## Run locally
+
+```bash
+python -m venv venv
+venv\Scripts\activate        # Windows (macOS/Linux: source venv/bin/activate)
+pip install -r requirements.txt
+copy .env.example .env       # macOS/Linux: cp .env.example .env
+```
+
+Edit `.env` and set your own `SECRET_KEY` (32+ random characters) and `ADMIN_PASSWORD` (8+ characters). The app will not start without them. Then:
+
+```bash
+python app.py
+```
+
+Open http://127.0.0.1:5000 and log in as `admin` with the `ADMIN_PASSWORD` you set. Changing `ADMIN_PASSWORD` and restarting updates the admin password.
+
+## Security notes
+
+- Secrets come from environment variables (`.env` is not committed). The app refuses to start without a strong `SECRET_KEY` and an `ADMIN_PASSWORD`.
+- Sessions end automatically when a password changes or the account is deleted.
+- Passwords are hashed with Werkzeug.
+- Admin pages require the admin account; users can only see and release their own bookings.
+- All forms, including delete and logout, use POST with CSRF tokens.
+- Older commits of this repository contain a hard-coded key and admin password from the first version. They are no longer used and must never be reused.
+
+## Deploy
+
+The included `Procfile` runs `gunicorn app:app`. Set `SECRET_KEY`, `ADMIN_PASSWORD`, `DATABASE_URL` and `SESSION_COOKIE_SECURE=1` in your host's environment settings.

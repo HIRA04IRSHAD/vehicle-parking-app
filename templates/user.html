@@ -185,7 +185,7 @@
     <div class="nav-links">
       <a href="/dashboard">Dashboard</a>
       <a href="/records">Records</a>
-      <a href="/logout">Logout</a>
+      <form action="/logout" method="POST" class="d-inline m-0"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-link p-0 border-0 align-baseline">Logout</button></form>
     </div>
   </nav>
 
@@ -193,7 +193,10 @@
   <div class="container position-relative text-center mt-5">
     <h2 class="fw-bold mb-4">Available Parking Slots</h2>
 
-    <form class="d-flex justify-content-center mb-5" method="GET" action="/user">
+    {% with messages = get_flashed_messages() %}{% if messages %}
+      <div class="alert alert-warning" role="alert">{% for m in messages %}<div>{{ m }}</div>{% endfor %}</div>
+      {% endif %}{% endwith %}
+      <form class="d-flex justify-content-center mb-5" method="GET" action="/user">
       <input class="form-control me-2 w-50" type="search" placeholder="Search by location name" name="query"/>
       <button class="btn btn-outline-primary" type="submit">Search</button>
       <a href="/user" class="btn btn-primary ms-2">Reset</a>

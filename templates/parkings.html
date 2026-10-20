@@ -178,13 +178,16 @@
     <h2 class="nav-title">🅿️ Galaxy Parking Admin</h2>
     <div class="d-flex">
       <a href="/admin" class="btn btn-outline-light btn-sm me-2">Dashboard</a>
-      <a href="/logout" class="btn btn-outline-light btn-sm">Logout</a>
+      <form action="/logout" method="POST" class="d-inline m-0"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-outline-light btn-sm">Logout</button></form>
     </div>
   </nav>
 
   <div class="container mt-4">
     <!-- Search Bar -->
     <div class="search-bar">
+      {% with messages = get_flashed_messages() %}{% if messages %}
+      <div class="alert alert-warning" role="alert">{% for m in messages %}<div>{{ m }}</div>{% endfor %}</div>
+      {% endif %}{% endwith %}
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search by location name" aria-label="Search" name="query" />
         <button class="btn btn-success" type="submit">Search</button>
@@ -226,8 +229,7 @@
             <div class="mt-4 d-flex justify-content-end gap-2 flex-wrap">
               <a href="/modify_parking/{{ park.id }}" class="btn btn-sm btn-info">Modify</a>
               {% if available_spots_count[park.id] == total_spots_count[park.id] %}
-                <a href="/remove_parking/{{ park.id }}" class="btn btn-sm btn-danger"
-                onclick="return confirm('Are you sure you want to delete this parking lot?');">Delete</a>
+                <form action="/remove_parking/{{ park.id }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this parking lot?');"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-sm btn-danger">Delete</button></form>
               {% else %}
                 <button class="text-muted btn btn-sm btn-warning"
                 onclick="return alert('This Parking Lot cannot be deleted. It has Active Bookings');">

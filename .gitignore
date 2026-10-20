@@ -7,3 +7,6 @@ instance/
 *.pdf
 Untitled.png
 .env
+static/charts/
+*.zip
+VehicleParking/

@@ -147,10 +147,14 @@
       <p class="navbar-brand fw-bold fs-4 mb-0">🅿️ Spot Details</p>
       <div class="d-flex">
         <a class="btn btn-outline-light btn-sm me-2" href="/admin">Dashboard</a>
-        <a class="btn btn-danger btn-sm" href="/logout">Logout</a>
+        <form action="/logout" method="POST" class="d-inline m-0"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-danger btn-sm">Logout</button></form>
       </div>
     </div>
   </nav>
+  {% with messages = get_flashed_messages() %}{% if messages %}
+  <div class="container mt-3"><div class="alert alert-warning" role="alert">{% for m in messages %}<div>{{ m }}</div>{% endfor %}</div></div>
+  {% endif %}{% endwith %}
+
 
   <!-- Main Content -->
   <div class="main-container">
@@ -178,8 +182,7 @@
         </div>
         <div class="col-8">
           {% if spot.status == 'A' %}
-            <a href="/remove_spot/{{ spot.id }}" class="btn btn-outline-danger btn-sm"
-              onclick="return confirm('Are you sure you want to remove this spot?');">Delete</a>
+            <form action="/remove_spot/{{ spot.id }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to remove this spot?');"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-outline-danger btn-sm">Delete</button></form>
           {% else %}
             <div class="text-muted small">Occupied spot cannot be deleted.</div>
           {% endif %}

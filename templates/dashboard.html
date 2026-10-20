@@ -142,10 +142,14 @@
       <a class="navbar-brand" href="#">Galaxy Parking</a>
       <div class="navbar-nav ms-auto">
         <span class="navbar-text me-3">Welcome, {{ session['username'] }}!</span>
-        <a class="nav-link" href="/logout">Logout</a>
+        <form action="/logout" method="POST" class="d-inline m-0"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="nav-link btn btn-link p-0 border-0 align-baseline">Logout</button></form>
       </div>
     </div>
   </nav>
+  {% with messages = get_flashed_messages() %}{% if messages %}
+  <div class="container mt-3"><div class="alert alert-warning" role="alert">{% for m in messages %}<div>{{ m }}</div>{% endfor %}</div></div>
+  {% endif %}{% endwith %}
+
 
   <!-- Dashboard Content -->
   <div class="content container">

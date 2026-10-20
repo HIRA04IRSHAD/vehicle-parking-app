@@ -141,7 +141,7 @@
       <a class="navbar-brand" href="/admin">🅿️ Galaxy Parking Admin</a>
       <div class="d-flex">
         <a class="btn btn-outline-light btn-sm me-2" href="/admin">Dashboard</a>
-        <a class="btn btn-outline-light btn-sm" href="/logout">Logout</a>
+        <form action="/logout" method="POST" class="d-inline m-0"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-outline-light btn-sm">Logout</button></form>
       </div>
     </div>
   </nav>
@@ -151,7 +151,11 @@
     <div class="glass-card shadow-lg">
       <h3>Add Parking Slots</h3>
 
+      {% with messages = get_flashed_messages() %}{% if messages %}
+      <div class="alert alert-warning" role="alert">{% for m in messages %}<div>{{ m }}</div>{% endfor %}</div>
+      {% endif %}{% endwith %}
       <form action="/add_spots" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="mb-3">
           <label for="location_name">Parking Lot Name</label>
           <input type="text" class="form-control" id="location_name" name="location_name" placeholder="Enter parking lot name" required>

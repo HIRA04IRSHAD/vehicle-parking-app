@@ -146,8 +146,8 @@
     <div class="container-fluid">
       <h2>Edit Profile</h2>
       <div class="navbar-nav ms-auto">
-        <a class="nav-link" href="/admin">Back to Dashboard</a>
-        <a class="nav-link" href="/logout">Logout</a>
+        <a class="nav-link" href="/dashboard">Back to Dashboard</a>
+        <form action="/logout" method="POST" class="d-inline m-0"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="nav-link btn btn-link p-0 border-0 align-baseline">Logout</button></form>
       </div>
     </div>
   </nav>
@@ -169,6 +169,7 @@
       {% endwith %}
 
       <form action="/profile" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
           <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
@@ -191,7 +192,7 @@
 
         <div class="d-grid gap-2">
           <button type="submit" class="btn btn-primary">Update Profile</button>
-          <a href="/admin" class="btn btn-secondary">Cancel</a>
+          <a href="/dashboard" class="btn btn-secondary">Cancel</a>
         </div>
       </form>
     </div>

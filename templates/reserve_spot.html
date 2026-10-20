@@ -83,6 +83,10 @@
 </head>
 
 <body>
+  {% with messages = get_flashed_messages() %}{% if messages %}
+  <div class="container mt-3"><div class="alert alert-warning" role="alert">{% for m in messages %}<div>{{ m }}</div>{% endfor %}</div></div>
+  {% endif %}{% endwith %}
+
   <div class="overlay"></div>
 
   <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
@@ -90,6 +94,7 @@
       <h3 class="text-center mb-4">Book Parking Slot</h3>
 
       <form action="/reserve_spot/{{parking_id}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="mb-3">
           <label for="parking_id" class="form-label">Parking Lot ID</label>
           <input type="text" class="form-control" id="parking_id" name="parking_id" value="{{ parking_id }}" readonly>
