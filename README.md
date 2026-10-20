@@ -58,4 +58,6 @@ Open http://127.0.0.1:5000 and log in as `admin` with the `ADMIN_PASSWORD` you s
 
 ## Deploy
 
-The included `Procfile` runs `gunicorn app:app`. Set `SECRET_KEY`, `ADMIN_PASSWORD`, `DATABASE_URL` and `SESSION_COOKIE_SECURE=1` in your host's environment settings.
+The included `render.yaml` deploys the app on Render's free plan (New → Blueprint → pick this repo). Render generates `SECRET_KEY` and `ADMIN_PASSWORD`; you can see the admin password under the service's Environment tab. On the free plan the SQLite data resets when the service restarts, so it works as a demo. Set `DATABASE_URL` to a Postgres database to keep data.
+
+On any other host, the `Procfile` runs `gunicorn app:app`. Set `SECRET_KEY`, `ADMIN_PASSWORD`, `DATABASE_URL` and `SESSION_COOKIE_SECURE=1` in its environment settings.
